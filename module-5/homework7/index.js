@@ -17,14 +17,15 @@ app.get('/', (req, res) => {
     res.send('hello world 2')
 })
 
+// obteniendo lista de estudiantes
 
 app.get('/students', (req, res) => {
     res.send(students)
 })
 
-// obtener o buscar por id
+// obtener o buscar por id, nombre, edad y labor
 
-app.get('/students/:id', (req, res) => {
+app.get('/students/id/:id', (req, res) => {
     const id = req.params.id;
     const result = students.find((student) => student.id === parseInt(id)) // cuando se usa .filter, no retorna el else
     if (result) res.send(result)
@@ -34,7 +35,37 @@ app.get('/students/:id', (req, res) => {
     }
 })
 
-// 
+app.get('/students/major/:major', (req, res) => {
+    const major = req.params.major;
+    const result = students.find((student) => student.major == major) 
+    if (result) res.send(result)
+    else {
+        res.status(404)
+        res.send('student major not found')
+    }
+})
+
+app.get('/students/age/:age', (req, res) => {
+    const age = req.params.age;
+    const result = students.find((student) => student.age === parseInt(age))
+    if (result) res.send(result)
+    else {
+        res.status(404)
+        res.send('student age not found')
+    }
+})
+
+app.get('/students/name/:name', (req, res) => {
+    const name = req.params.name;
+    const result = students.find((student) => student.name == name) 
+    if (result) res.send(result)
+    else {
+        res.status(404)
+        res.send('student name not found')
+    }
+})
+
+// creando estudiantes
 
 app.post('/students', (req, res) => {
     console.log(req.body);
