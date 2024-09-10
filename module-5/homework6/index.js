@@ -20,7 +20,6 @@ http.createServer((req, res) => {
         case '/products':
             res.write(products)
 
-
             default:
                 res.write('error 404: not found')
     }
