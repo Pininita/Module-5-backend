@@ -1,6 +1,6 @@
-import { error } from 'console'
 import express from 'express'
-import  {readFile } from 'fs/promises'
+import { readFile } from 'fs/promises'
+import { getId } from './components/getId'
 
 const app = express()
 const port = 3001
@@ -17,12 +17,12 @@ let students = [
 // consumiendo students.json
 
 readFile("./students.json", 'utf-8')
-.then((data) => {
-    students = JSON.parse(data)
-})
-.catch((err) => {
-    console.error('error reading students.json',err)
-})
+    .then((data) => {
+        students = JSON.parse(data)
+    })
+    .catch((err) => {
+        console.error('error reading students.json', err)
+    })
 
 // comprobando funcionamiento
 
@@ -38,19 +38,11 @@ app.get('/students', (req, res) => {
 
 // obtener o buscar por id, nombre, edad y labor
 
-app.get('/students/id/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const results = students.filter(student => student.id === id);
-    if (results.length > 0) {
-        res.send(results);
-    } else {
-        res.status(404).send('student id not found');
-    }
-})
+app.get('/students/id/:id', getId )
 
 app.get('/students/major/:major', (req, res) => {
     const major = req.params.major;
-    const results = students.filter((student) => student.major == major) 
+    const results = students.filter((student) => student.major == major)
     if (results.length > 0) {
         res.send(results)
     }
@@ -72,7 +64,7 @@ app.get('/students/age/:age', (req, res) => {
 
 app.get('/students/name/:name', (req, res) => {
     const name = req.params.name;
-    const results = students.filter((student) => student.name == name) 
+    const results = students.filter((student) => student.name == name)
     if (results.length > 0) {
         res.send(results);
     } else {
