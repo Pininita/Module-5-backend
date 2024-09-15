@@ -1,18 +1,18 @@
 import express from 'express'
 import { readFile } from 'fs/promises'
-import { getId } from './components/getId'
+import { getId } from './functions/getId.js'
+import { getMajor } from './functions/getMajor.js'
+import { getAge } from './functions/getAge.js'
+import { getName } from './functions/getName.js'
+import { postStudents } from './functions/postStudents.js'
+import { deleteStudents } from './functions/deleteStudents.js'
 
 const app = express()
 const port = 3001
 
 app.use(express.json())
 
-
-let students = [
-    // { id: 1, name: 'Alice', age: 20, major: 'Computer Science' },
-    // { id: 2, name: 'Bob', age: 22, major: 'Mathematics' },
-    // { id: 3, name: 'Charlie', age: 21, major: 'Physics' }
-];
+export let students = [];
 
 // consumiendo students.json
 
@@ -38,62 +38,22 @@ app.get('/students', (req, res) => {
 
 // obtener o buscar por id, nombre, edad y labor
 
-app.get('/students/id/:id', getId )
+app.get('/students/id/:id', getId)
 
-app.get('/students/major/:major', (req, res) => {
-    const major = req.params.major;
-    const results = students.filter((student) => student.major == major)
-    if (results.length > 0) {
-        res.send(results)
-    }
-    else {
-        res.status(404)
-        res.send('student major not found')
-    }
-})
+app.get('/students/major/:major', getMajor)
 
-app.get('/students/age/:age', (req, res) => {
-    const age = parseInt(req.params.age);
-    const results = students.filter(student => student.age === age);
-    if (results.length > 0) {
-        res.send(results);
-    } else {
-        res.status(404).send('student age not found');
-    }
-})
+app.get('/students/age/:age', getAge)
 
-app.get('/students/name/:name', (req, res) => {
-    const name = req.params.name;
-    const results = students.filter((student) => student.name == name)
-    if (results.length > 0) {
-        res.send(results);
-    } else {
-        res.status(404).send('student name not found');
-    }
-})
+app.get('/students/name/:name', getName)
 
 // creando estudiantes
 
-app.post('/students/add', (req, res) => {
-    console.log(req.body);
-    students.push(req.body)
-    res.send(`student add ${req.body.name}`)
-})
+app.post('/students/add', postStudents)
 
 // eliminar elementos del array por medio de busqueda del id
 
-app.delete('/students/remove/:id', (req, res) => {
-    const id = req.params.id;
-    const result = students.findIndex((student) => student.id === parseInt(id))
-    if (result !== -1) {
-        students.splice(result, 1)
-        res.send(`Student remove, id: ${id}`)
-    }
-})
-
-
+app.delete('/students/remove/:id', deleteStudents)
 
 app.listen(port, () => {
     console.log('server is running');
 })
-
