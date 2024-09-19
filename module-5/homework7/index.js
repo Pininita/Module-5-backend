@@ -7,20 +7,13 @@ import { getName } from './functions/getName.js'
 import { postStudents } from './functions/postStudents.js'
 import { deleteStudents } from './functions/deleteStudents.js'
 import { putStudents } from './functions/putStudents.js'
+import { bodyValidation, logMiddleWare } from './middlewares/middlewares.js'
 
 const app = express()
 const port = 3001
 
 app.use(express.json())  // revisa cada endpoint si contiene algo
-app.use((req, res, next) => {
-    const log = {
-       method: req.method,
-       date: new Date().toLocaleDateString(),
-       url: req.url
-    }
-    console.log(log)
-    next()
-})
+app.use(logMiddleWare)
 
 export let students = [];
 
@@ -58,11 +51,11 @@ app.get('/students/name/:name', getName)
 
 // creando estudiantes
 
-app.post('/students/add', postStudents)
+app.post('/students/add', bodyValidation, postStudents)
 
 // actualizando estudiantes
 
-app.put('/students/:id', putStudents)
+app.put('/students/:id', bodyValidation, putStudents)
 
 // eliminar elementos del array por medio de busqueda del id
 
