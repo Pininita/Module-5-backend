@@ -4,7 +4,7 @@ export const getMajor = async (req, res) => {
     const response = await fs.readFile('./students.json')
     const students = await JSON.parse(response)
     const major = req.params.major;
-    const results = students.filter((student) => student.major == major)
+    const results = students.filter((student) => student.major.toLowerCase() == major.toLowerCase())
     if (results.length > 0) {
         res.send(results)
     }

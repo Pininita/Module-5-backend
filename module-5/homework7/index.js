@@ -6,11 +6,21 @@ import { getAge } from './functions/getAge.js'
 import { getName } from './functions/getName.js'
 import { postStudents } from './functions/postStudents.js'
 import { deleteStudents } from './functions/deleteStudents.js'
+import { putStudents } from './functions/putStudents.js'
 
 const app = express()
 const port = 3001
 
-app.use(express.json())
+app.use(express.json())  // revisa cada endpoint si contiene algo
+app.use((req, res, next) => {
+    const log = {
+       method: req.method,
+       date: new Date().toLocaleDateString(),
+       url: req.url
+    }
+    console.log(log)
+    next()
+})
 
 export let students = [];
 
@@ -49,6 +59,10 @@ app.get('/students/name/:name', getName)
 // creando estudiantes
 
 app.post('/students/add', postStudents)
+
+// actualizando estudiantes
+
+app.put('/students/:id', putStudents)
 
 // eliminar elementos del array por medio de busqueda del id
 
